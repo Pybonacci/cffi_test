@@ -10,7 +10,7 @@ _hyp2f1 = lib.hyp2f1
 _vd_hyp2f1 = lib.vd_hyp2f1
 
 
-@njit
+@njit('f8, f8, f8, f8')
 def hyp2f1(a, b, c, x):
     """Gauss hypergeometric function 2F1.
 
@@ -23,6 +23,27 @@ def hyp2f1(a, b, c, x):
         return np.inf
 
     return _hyp2f1(a, b, c, x)
+
+
+
+@njit('f8, f8, f8, f8[:]')
+def hyp2f1(a, b, c, x):
+    """Gauss hypergeometric function 2F1 vectorized for float x and overriden.
+
+    Parameters
+    ----------
+    a, b, c : float
+    x : array
+
+    """
+    res = np.empty_like(x)
+    _vd_hyp2f1(
+            len(x), a, b, c,
+            ffi.from_buffer(x), ffi.from_buffer(res)
+    )
+
+    res[x == 1.0] = np.inf
+    return res
 
 
 @njit

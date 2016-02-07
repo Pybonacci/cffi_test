@@ -24,3 +24,11 @@ def test_hyp2f1_battin_array():
     res = hyper.vd_hyp2f1(3, 1, 5/2, x)
 
     assert_array_almost_equal(res, expected_res)
+
+
+def test_hyp2f1_battin_array_same():
+    x = np.linspace(0, 1, num=11)
+    expected_res = special.hyp2f1(3, 1, 5/2, x)
+    res = hyper.hyp2f1(3, 1, 5/2, x)
+
+    assert_array_almost_equal(res, expected_res)
